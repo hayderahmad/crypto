@@ -13,10 +13,11 @@
         </li>
             
       </ul>
-      <form class="d-flex" role="search">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-secondary" type="submit">Search</button>
-      </form>
+      <%= form_tag home_prices_path, :method =>'Post' , class: "d-flex" do%>
+      <%= text_field_tag 'sym', nil, placeholder: 'Enter Crypto Symbol', class: "form-control me-2"%>
+      <%= submit_tag 'Lookup', class: "btn btn-outline-secondary"%>
+      <% end%>
+      
     </div>
   </div>
 </nav>

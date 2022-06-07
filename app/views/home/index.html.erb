@@ -1,3 +1,26 @@
+<table class="table table-sm table-striped table-bordered table-hover">
+    <thead>
+        <tr>
+        <th scope="col">symbol</th>
+        <th scope="col">price</th>
+        <th scope="col">24h high</th>
+        <th scope="col">24h low</th>
+        <th scope="col">marketcap</th>
+        </tr>
+    </thead>
+    <% @prices["DISPLAY"].each do |key, value|%>
+        <tbody>
+            <tr>
+            <th scope="row"><%=key%></th>
+            <td><%=value["USD"]["PRICE"]%></td>
+            <td><%=value["USD"]["HIGHDAY"]%></td>
+            <td><%=value["USD"]["LOWDAY"]%></td>
+            <td><%=value["USD"]["MKTCAP"]%></td>
+            </tr>
+        </tbody>
+    <%end%>
+</table>
+<br/>
 <div class="container">
     <div class="row">
         <%for x in @news["Data"]%>

@@ -1,2 +1,16 @@
-<h1>Prices page</h1>
+<% if @symbol%>
+    <%if @qoute['Response']%>
+        This crypto symbole doesn't exist please try again
+    <%else%>
+        <% @qoute["DISPLAY"].each do |key, value|%>
+            <%=key%>-<%=value["USD"]["PRICE"]%><br/>
+            <%=value["USD"]["HIGHDAY"]%><br/>
+            <%=value["USD"]["LOWDAY"]%><br/>
+            <%=value["USD"]["MKTCAP"]%><br/>
+        <%end%>
+    <%end%>
+<%else%>
+Please enter a symbol...
+<%end%>
+
 
