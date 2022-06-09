@@ -7,6 +7,12 @@ class HomeController < ApplicationController
     @uri = URI(@url)
     @response = Net::HTTP.get(@uri)
     @news = JSON.parse(@response)
+    @news['Data'].each do |recived_article|
+      unless Article.exists?(article_id: recived_article['id'])  
+        @article = Article.new(title: recived_article['title'], body: recived_article['body'], imageurl: recived_article['imageurl'], source: recived_article['source'], article_url: recived_article['url'], article_id: recived_article['id'])
+        @article.save
+      end
+    end
     @prices_url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,BCH,EOS,LTC,ADA,XLM,MIOTA,USDT,TRX&tsyms=USD'
     @prices_uri = URI(@prices_url)
     @prices_response = Net::HTTP.get(@prices_uri)
@@ -24,6 +30,10 @@ class HomeController < ApplicationController
       @qoute_response = Net::HTTP.get(@qoute_uri)
       @qoute = JSON.parse(@qoute_response)
     end
+  end
+
+  def show
+    @article = Article.find_by(article_id: params[:id])
   end
   
 end

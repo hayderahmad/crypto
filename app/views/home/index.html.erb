@@ -23,17 +23,18 @@
 <br/>
 <div class="container">
     <div class="row">
-        <%for x in @news["Data"]%>
+        <%for current_article in @news["Data"]%>
             <div class="col-sm">
                 <div class="card" style="width: 18rem;">
-                    <img src="<%= x["imageurl"] %>" class="card-img-top" alt="<%= x["source"]%>">
+                    <img src="<%= current_article["imageurl"] %>" class="card-img-top" alt="<%= current_article["source"]%>">
                     <div class="card-body">
-                        <h5 class="card-title"><%= x["title"]%></h5>
-                        <p class="card-text"><%= x["body"]%></p>
-                        <a href="<%= x["url"]%>" class="btn btn-secondary">Read more.....</a>
+                        <h5 class="card-title"><%= current_article["title"]%></h5>
+                        <p class="card-text"><%= current_article["body"]%></p>
+                        <a href="<%= current_article["url"]%>" class="btn btn-secondary">Read more.....</a>
+                        <a href="home/show/<%= current_article["id"]%>" class="btn btn-secondary">Discussions</a>
                     </div>
                 </div>
-            <br/>
+            <br/> 
             </div>
         <%end%>
     </div>
