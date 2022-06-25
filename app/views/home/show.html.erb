@@ -1,3 +1,40 @@
-article page
+<img src="<%= @article.imageurl %>" alt="<%= @article.source%>">
+<br/>
+<h1><%= @article.title %></h1>
+<br/>
 
-<%= @article.title %>
+<p><%= @article.body %></p>
+
+
+
+<h2>Comments</h2>
+<% @article.comments.each do |comment| %>
+  <p>
+    <strong>Commenter:</strong>
+    <%= comment.commenter %>
+  </p>
+
+  <p>
+    <strong>Comment:</strong>
+    <%= comment.body %>
+  </p>
+  <a href="/home/delete_comment/<%= @article.id%>/<%= comment.id%>" class="btn btn-secondary">Delete Comment</a>
+  <a href="/home/show_comment/<%= @article.id%>/<%= comment.id%>" class="btn btn-secondary">Update Comment</a>
+<% end %>
+
+<br/>
+<form action='/home/create_comment/<%=@article.id%>' method="post">
+  <div class="mb-3">
+    <input name= "commenter_name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="commenter">
+  </div>
+  <div class="mb-3">
+    <textarea name= "comment_body" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="comment"></textarea>
+  </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary mb-3">submit</button>
+  </div>
+</form>
+<a href="/" class="btn btn-secondary">news page</a>
+
+
+

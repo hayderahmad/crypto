@@ -23,7 +23,7 @@
 <br/>
 <div class="container">
     <div class="row">
-        <%for current_article in @news["Data"]%>
+        <%for current_article in @news%>
             <div class="col-sm">
                 <div class="card" style="width: 18rem;">
                     <img src="<%= current_article["imageurl"] %>" class="card-img-top" alt="<%= current_article["source"]%>">
@@ -31,7 +31,8 @@
                         <h5 class="card-title"><%= current_article["title"]%></h5>
                         <p class="card-text"><%= current_article["body"]%></p>
                         <a href="<%= current_article["url"]%>" class="btn btn-secondary">Read more.....</a>
-                        <a href="home/show/<%= current_article["id"]%>" class="btn btn-secondary">Discussions</a>
+                        <a href="/home/show/<%= current_article["id"]%>" class="btn btn-secondary">Discussions</a>
+                        
                     </div>
                 </div>
             <br/> 

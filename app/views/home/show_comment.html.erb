@@ -1,0 +1,12 @@
+<h1> Edit <%= @comment[:commenter]%> Comment</h1>
+  <form action='/home/update_comment/<%=@article[:id]%>/<%=@comment[:id]%>' method="post">
+  <div class="mb-3">
+    <input name= "commenter_name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="<%= @comment[:commenter]%>">
+  </div>
+  <div class="mb-3">
+    <textarea name= "comment_body" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="<%= @comment[:body]%>"></textarea>
+  </div>
+  <div class="mb-3">
+    <button type="submit" class="btn btn-primary mb-3">Update</button>
+  </div>
+</form>
