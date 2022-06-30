@@ -6,12 +6,17 @@
     </button>
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-        
-        <li class="nav-item">
-          <%= link_to "Get Prices", home_prices_path, class: "nav-link"%>
-          
-        </li>
-            
+          <%= link_to "Get Prices", home_prices_path, class: "nav-link"%> 
+          <%if session[:user_id]%>
+              <%if User.find(session[:user_id]).admin%>
+                  <%= link_to "Users", "/users", class: "nav-link"%>
+              <%end%>
+              <%= button_to "Sign Out", "/session", method: :delete, class: "nav-link"%>
+              <%= link_to User.find(session[:user_id]).name, "/users/#{User.find(session[:user_id]).id}", class: "nav-link"%>
+          <%else%>
+              <%= link_to "Sign Up", "/users/new", class: "nav-link"%>
+              <%= link_to "Sign in", "/session/sign_in", class: "nav-link"%>
+          <%end%>
       </ul>
       <%= form_tag home_prices_path, :method =>'Post' , class: "d-flex" do%>
       <%= text_field_tag 'sym', nil, placeholder: 'Enter Crypto Symbol', class: "form-control me-2"%>

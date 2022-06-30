@@ -45,7 +45,12 @@ class HomeController < ApplicationController
   
   def create_comment
     @article = Article.find(params[:id])
-    @comment = @article.comments.create(commenter: params[:commenter_name], body: params[:comment_body])
+    if session[:user_id]
+      commenter_name = User.find(session[:user_id]).name
+    else
+      commenter_name = "Guest"
+    end
+    @comment = @article.comments.create(commenter: commenter_name, body: params[:comment])
     redirect_to "/home/show/#{params[:id]}", allow_other_host: true
   end
   def show_comment
@@ -58,4 +63,20 @@ class HomeController < ApplicationController
       @comment = @article.comments.update(commenter: params[:commenter_name], body: params[:comment_body])
       redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
   end
+  def like
+    
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.find(params[:comment_id])
+    new_like = params[:like].to_i + 1
+    @comment = @comment.update(like: new_like)
+    redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+  end
+  def dislike
+    @article = Article.find(params[:article_id])
+    @comment = @article.comments.find(params[:comment_id])
+    new_dislike =  params[:dislike].to_i + 1
+    @comment = @comment.update(dislike: new_dislike)
+    redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+  end
+
 end

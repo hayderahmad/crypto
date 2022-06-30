@@ -18,23 +18,31 @@
     <strong>Comment:</strong>
     <%= comment.body %>
   </p>
-  <a href="/home/delete_comment/<%= @article.id%>/<%= comment.id%>" class="btn btn-secondary">Delete Comment</a>
-  <a href="/home/show_comment/<%= @article.id%>/<%= comment.id%>" class="btn btn-secondary">Update Comment</a>
+  <p>
+  Like: <%=comment.like%>
+  </p>
+  <p>
+  Dislike: <%=comment.dislike%>
+  </p>
+  <%if User.find(session[:user_id]).name == comment.commenter%>
+    <a href="/home/delete_comment/<%= @article.id%>/<%= comment.id%>" class="btn btn-secondary">Delete Comment</a>
+    <a href="/home/show_comment/<%= @article.id%>/<%= comment.id%>" class="btn btn-secondary">Update Comment</a>
+  <%end%>
+  <a href="/home/like/<%= @article.id%>/<%= comment.id%>/<%= comment.like%>" class="btn btn-secondary">Like</a>
+  <a href="/home/dislike/<%= @article.id%>/<%= comment.id%>/<%= comment.dislike%>" class="btn btn-secondary">Dislike</a>
 <% end %>
 
 <br/>
-<form action='/home/create_comment/<%=@article.id%>' method="post">
-  <div class="mb-3">
-    <input name= "commenter_name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="commenter">
-  </div>
-  <div class="mb-3">
-    <textarea name= "comment_body" class="form-control" id="exampleFormControlTextarea1" rows="3" placeholder="comment"></textarea>
-  </div>
-  <div class="mb-3">
-    <button type="submit" class="btn btn-primary mb-3">submit</button>
-  </div>
-</form>
-<a href="/" class="btn btn-secondary">news page</a>
 
+
+<%= form_with(url: "/home/create_comment/#{@article.id}") do |f|%>
+    <%= f.label :comment%>
+    <div class="mb-3">
+    <%= f.text_area :comment, rows: 5%>
+    </div>
+    <div class="mb-3">
+    <%= f.submit "Submit comment"%>
+    </div>
+<%end%>
 
 
