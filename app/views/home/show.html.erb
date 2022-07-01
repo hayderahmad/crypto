@@ -36,9 +36,8 @@
 
 
 <%= form_with(url: "/home/create_comment/#{@article.id}") do |f|%>
-    <%= f.label :comment%>
     <div class="mb-3">
-    <%= f.text_area :comment, rows: 5%>
+    <%= f.text_area :comment, rows: 5, placeholder: "Write your comment"%>
     </div>
     <div class="mb-3">
     <%= f.submit "Submit comment"%>

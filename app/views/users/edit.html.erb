@@ -1,15 +1,18 @@
 <h1>Edit <%= @user.name%>'s Profile</h1>
-<form action="/users/<%= @user.id%>" method="post">
-<div class="mb-3">
-    <input name= "name" type="text" class="form-control" id="exampleFormControlInput1" placeholder="<%= @user.name%>">
-</div>
-<div class="mb-3">
-    <input name= "email" type="text" class="form-control" id="exampleFormControlInput1" placeholder="<%= @user.email%>">
-</div>
-<div class="mb-3">
-    <input name= "password" type="text" class="form-control" id="exampleFormControlInput1" placeholder="Password">
-</div>
-<div class="mb-3">
-    <button type="submit" class="btn btn-primary mb-3">Update Account</button>
-</div>
-</form>
+<%= form_with(url: "/users/#{@user.id}") do |f|%>
+    <%= f.label :name%>
+    <div class="mb-3">
+    <%= f.text_field :name, autofocus: true, value: @user.name%>
+    </div>
+    <%= f.label :email%>
+    <div class="mb-3">
+    <%= f.email_field :email, value: @user.email%>
+    </div>
+    <%= f.label :password%>
+    <div class="mb-3">
+    <%= f.password_field :password%>
+    </div>
+    <div class="mb-3">
+    <%= f.submit "Edit Account"%>
+    </div>
+<%end%>

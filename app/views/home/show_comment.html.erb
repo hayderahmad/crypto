@@ -1,9 +1,9 @@
 <h1> Edit <%= @comment[:commenter]%> Comment</h1>
-
-<%= form_with(url: "/home/create_comment/#{@article.id}", local: true) do |f|%>
+  
+<%= form_with(url: "/home/update_comment/#{@article.id}/#{@comment.id}") do |f|%>
     <%= f.label :comment%>
     <div class="mb-3">
-    <%= f.text_area :comment, rows: 5%>
+    <%= f.text_area :comment, rows: 5, value: @comment.body%>
     </div>
     <div class="mb-3">
     <%= f.submit "Update comment"%>

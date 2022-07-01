@@ -1,4 +1,5 @@
 class HomeController < ApplicationController
+  before_action :require_signin
   def index
     require 'net/http'
     require 'json'
@@ -50,8 +51,9 @@ class HomeController < ApplicationController
     else
       commenter_name = "Guest"
     end
-    @comment = @article.comments.create(commenter: commenter_name, body: params[:comment])
-    redirect_to "/home/show/#{params[:id]}", allow_other_host: true
+    if @article.comments.create(commenter: commenter_name, body: params[:comment])
+        redirect_to "/home/show/#{params[:id]}", allow_other_host: true
+    end
   end
   def show_comment
     @article = Article.find(params[:article_id])
@@ -60,8 +62,9 @@ class HomeController < ApplicationController
   def update_comment
       @article = Article.find(params[:article_id])
       @comment = @article.comments.find(params[:comment_id])
-      @comment = @article.comments.update(commenter: params[:commenter_name], body: params[:comment_body])
-      redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+      if @article.comments.update(body: params[:comment])
+          redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+      end
   end
   def like
     

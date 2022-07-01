@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+    before_action :require_signin, except: [:create]
     def index
         @users= User.all
     end
@@ -28,6 +29,7 @@ class UsersController < ApplicationController
     end
     def destroy
         User.find(params[:id]).destroy
+        session[:user_id] = nil
         redirect_to "/users",allow_other_host: true, notice: "Successfuly deleted"
         
     end
