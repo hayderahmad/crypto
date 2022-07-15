@@ -71,4 +71,6 @@ group :test do
   gem "capybara"
   gem "selenium-webdriver"
   gem "webdrivers"
+ 
+  gem 'embedded_record', '~> 0.0.5'
 end
