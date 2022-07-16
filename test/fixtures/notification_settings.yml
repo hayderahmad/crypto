@@ -1,9 +1,11 @@
 # Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
 
 one:
-  setting_config: 
+  setting_config_name: MyString
+  setting_config_params: 
   user: one
 
 two:
-  setting_config: 
+  setting_config_name: MyString
+  setting_config_params: 
   user: two

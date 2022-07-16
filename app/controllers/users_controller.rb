@@ -33,6 +33,10 @@ class UsersController < ApplicationController
         redirect_to "/users",allow_other_host: true, notice: "Successfuly deleted"
         
     end
+
+    def update_notifications
+        fail
+    end
     private
         def user_params
             params.require(:user).premit(:name, :email, :password)

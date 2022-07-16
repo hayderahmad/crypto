@@ -21,5 +21,6 @@ Rails.application.routes.draw do
   get "/session/sign_in"
   post "/session", to: 'session#create'
   delete "/session", to: 'session#destroy'
+  post "/users/update/notifications", to: 'users#update_notifications'
 end
  

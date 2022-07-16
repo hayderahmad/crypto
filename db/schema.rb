@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.0].define(version: 2022_07_15_204254) do
+ActiveRecord::Schema[7.0].define(version: 2022_07_16_201233) do
   create_table "articles", force: :cascade do |t|
     t.string "title"
     t.string "body"
@@ -34,10 +34,13 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_204254) do
   end
 
   create_table "notification_settings", force: :cascade do |t|
-    t.json "setting_config"
+    t.string "setting_config_name"
+    t.json "setting_config_params"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "by_email", default: false
+    t.boolean "by_phone", default: false
     t.index ["user_id"], name: "index_notification_settings_on_user_id"
   end
 
@@ -48,6 +51,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_15_204254) do
     t.string "password_digest"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "phone"
   end
 
   add_foreign_key "comments", "articles"
