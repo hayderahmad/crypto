@@ -18,9 +18,16 @@ Rails.application.routes.draw do
   get "/users/:id/edit", to: 'users#edit'
   post "/users/:id", to: 'users#update'
   delete "/users/:id", to: 'users#destroy'
+  
   get "/session/sign_in"
   post "/session", to: 'session#create'
   delete "/session", to: 'session#destroy'
-  post "/users/update/notifications", to: 'users#update_notifications'
+  
+  get "notificationsettings/new", to: 'notification_settings#new'
+  post "notificationsettings/create", to: 'notification_settings#create'
+  post "notificationsettings/update/:user_id", to: 'notification_settings#update'
+  get "notificationsettings/edit/:user_id", to: 'notification_settings#edit'
+  
+  
 end
  

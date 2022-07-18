@@ -34,7 +34,7 @@ ActiveRecord::Schema[7.0].define(version: 2022_07_16_201233) do
   end
 
   create_table "notification_settings", force: :cascade do |t|
-    t.string "setting_config_name"
+    t.string "setting_config_type"
     t.json "setting_config_params"
     t.integer "user_id", null: false
     t.datetime "created_at", null: false

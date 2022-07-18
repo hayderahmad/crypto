@@ -1,28 +1,15 @@
 <h1><%=@user.name%>'s Profile</h1>
 <h2><%=mail_to(@user.email)%></h2>
+<h2><%=@user.phone%></h2>
 <%if @user.admin %>
     This is the admin Profile
 <%end%>
 <section>
 <%= link_to "Edit Profile", "/users/#{@user.id}/edit", class: "button" %>
+<%if @user.notification_settings.size > 0 %>
+<%= link_to "Update Alerts", "/notificationsettings/edit/#{@user.id}", class: "button" %>
+<%else%>
+<%= link_to "Create Alerts", "/notificationsettings/new", class: "button" %>
+<%end%>
 <%= button_to "Delete Account", "/users/#{@user.id}", method: :delete, data: {confirm: "Are you sure?"}, class: "button" %>
 </section>
-<%= form_with(url: "/users/update/notifications/") do |f|%>
-    <div class="mb-3">
-    <%@user.notification_setting.each do |ns|%>
-    <%puts ns.inspect%>
-    <%ns.setting_config.each do |setting, value|%>
-    <%puts(setting.inspect, value.inspect)%>
- <div class="mb-3">
-            <%= f.check_box(setting, {checked: true})%>
-            <%= f.label(setting, setting) %>
-        </div>
-        <div class="mb-3">
-        <%= f.number_field :price, step: 1, placeholder: "Name", value: value%>
-        </div> 
-    <%end%>
-    <%end%>
-    <div class="mb-3">
-    <%= f.submit%>
-    </div>
-<%end%>

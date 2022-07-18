@@ -1,0 +1,54 @@
+<h1>Update Alerts</h1>
+<%= form_with(url: "/notificationsettings/update/#{@user.id}") do |f|%>
+    <%@notifications.each do |setting|%>
+        <%if setting[:setting_config_type] == "like_count"%>
+            <div class="mb-3">
+            <%= f.label :like_count,  "Like Count"%>
+            <%= f.number_field :like_count, step: 1, value: setting[:setting_config_params]["count"].to_i%>
+            </div>
+            <div class="mb-3">
+            <%= f.check_box :like_count_by_phone, checked: setting[:by_phone]%>
+            <%= f.label :like_count_by_phone,  "By Phone"%>
+            </div>
+            <div class="mb-3">
+            <%= f.check_box :like_count_by_email, checked: setting[:by_email]%>
+            <%= f.label :like_count_by_email,  "By Email"%>
+            </div>
+            <div class="mb-3">
+        <%end%>
+        <%if setting[:setting_config_type] == "dislike_count"%>
+            <%= f.label :dislike_count,  "Dislike Count"%>
+            <%= f.number_field :dislike_count, step: 1, value: setting.setting_config_params["count"].to_i%>
+            </div>
+            <div class="mb-3">
+            <%= f.check_box :dislike_count_by_phone, checked: setting[:by_phone]%>
+            <%= f.label :dislike_count_by_phone,  "By Phone"%>
+            </div>
+            <div class="mb-3">
+            <%= f.check_box :dislike_count_by_email, checked: setting[:by_email]%>
+            <%= f.label :dislike_count_by_email,  "By Email"%>
+            </div>
+        <%end%>
+        <%if setting[:setting_config_type] == "comment_count"%>
+            <div class="mb-3">
+            <%= f.label :comment_count,  "Comment Count"%>
+            <%= f.number_field :comment_count, step: 1, value: setting.setting_config_params["count"].to_i%>
+            </div>
+            <div class="mb-3">
+            <%= f.label :comment_duration,  "Comment Within Period of"%>
+            <%= f.number_field :comment_duration, step: 1, value: setting.setting_config_params["within"].to_i%> Hours
+            </div>
+            <div class="mb-3">
+            <%= f.check_box :comment_count_by_phone, checked: setting[:by_phone]%>
+            <%= f.label :comment_count_by_phone,  "By Phone"%>
+            </div>
+            <div class="mb-3">
+            <%= f.check_box :comment_count_by_email, checked: setting[:by_email]%>
+            <%= f.label :comment_count_by_email,  "By Email"%>
+            </div>
+        <%end%>
+    <%end%>
+    <div class="mb-3">
+    <%= f.submit "Update"%>
+    </div>
+<%end%>

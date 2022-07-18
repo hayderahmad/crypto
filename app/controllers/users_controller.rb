@@ -8,7 +8,7 @@ class UsersController < ApplicationController
     end
     def create
         
-        @user= User.new(name: params[:name], email: params[:email], password: params[:password])
+        @user= User.new(name: params[:name], phone: params[:phone], email: params[:email], password: params[:password])
         if @user.save
             redirect_to "/users",allow_other_host: true, notice: "Successfuly created"
         else
@@ -20,7 +20,7 @@ class UsersController < ApplicationController
     end
     def update
         @user = User.find(params[:id])
-        if @user.update(name: params[:name], email: params[:email], password: params[:password])
+        if @user.update(name: params[:name], phone: params[:phone], email: params[:email], password: params[:password])
             redirect_to "/users/#{@user.id}", notice: "Successfuly updated"
         else
             render :edit
@@ -34,11 +34,9 @@ class UsersController < ApplicationController
         
     end
 
-    def update_notifications
-        fail
-    end
+    
     private
         def user_params
-            params.require(:user).premit(:name, :email, :password)
+            params.require(:user).premit(:name, :email, :password, :phone)
         end
 end
