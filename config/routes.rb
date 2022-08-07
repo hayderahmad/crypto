@@ -27,7 +27,7 @@ Rails.application.routes.draw do
   post "notificationsettings/create", to: 'notification_settings#create'
   post "notificationsettings/update/:user_id", to: 'notification_settings#update'
   get "notificationsettings/edit/:user_id", to: 'notification_settings#edit'
-  
+  # get "email/make/:id", to: 'user_mailer'
   
 end
  

@@ -1,9 +1,11 @@
 class HomeController < ApplicationController
+  require "protobuf/nats"
+  require '~/code/proto-definitions/definitions'
   before_action :require_signin
   def index
     require 'net/http'
     require 'json'
-
+    
     @url = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN'
     @uri = URI(@url)
     @response = Net::HTTP.get(@uri)
@@ -36,7 +38,7 @@ class HomeController < ApplicationController
   def show
     @article = Article.find(params[:id])
   end
-
+  
   def delete_comment
     @article = Article.find(params[:article_id])
     @comment = @article.comments.find(params[:comment_id])
@@ -45,6 +47,7 @@ class HomeController < ApplicationController
   end
   
   def create_comment
+    
     @article = Article.find(params[:id])
     if session[:user_id]
       commenter_name = User.find(session[:user_id]).name
@@ -52,27 +55,41 @@ class HomeController < ApplicationController
       commenter_name = "Guest"
     end
     if @article.comments.create(commenter: commenter_name, body: params[:comment])
-        redirect_to "/home/show/#{params[:id]}", allow_other_host: true
+      redirect_to "/home/show/#{params[:id]}", allow_other_host: true
     end
-  end
-  def show_comment
-    @article = Article.find(params[:article_id])
-    @comment = @article.comments.find(params[:comment_id])
-  end
-  def update_comment
+    NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
+      if @article.comments.count == setting.setting_config_params["count"].to_i
+          puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the article #{@article.title} has #{@article.comments.count} comment"
+          puts AlertService.client.send_alert(EmailAlert.new(:subject => "Testing", :body => "the article #{@article.title} has #{@article.comments.count} comment", :recipient_email=> setting.user.email))
+        end
+      end
+      
+    end
+    def show_comment
       @article = Article.find(params[:article_id])
       @comment = @article.comments.find(params[:comment_id])
+    end
+    def update_comment
+      @article = Article.find(params[:article_id])
+    @comment = @article.comments.find(params[:comment_id])
       if @article.comments.update(body: params[:comment])
           redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
       end
   end
   def like
-    
+    commenter = User.find(session[:user_id])
     @article = Article.find(params[:article_id])
     @comment = @article.comments.find(params[:comment_id])
     new_like = params[:like].to_i + 1
     @comment = @comment.update(like: new_like)
     redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+    @comment = @article.comments.find(params[:comment_id])
+    commenter.notification_settings.where(setting_config_type: "like_count").each do |setting|
+      if @comment.like == setting.setting_config_params["count"].to_i && @comment.commenter == commenter.name
+        puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the comment  #{@comment.body} has #{@comment.like} likes"
+        puts AlertService.client.send_alert(EmailAlert.new(:subject => "Testing", :body => "the comment  #{@comment.body} has #{@comment.like} likes", :recipient_email=> setting.user.email))
+      end
+    end
   end
   def dislike
     @article = Article.find(params[:article_id])
@@ -80,6 +97,13 @@ class HomeController < ApplicationController
     new_dislike =  params[:dislike].to_i + 1
     @comment = @comment.update(dislike: new_dislike)
     redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+    @comment = @article.comments.find(params[:comment_id])
+    commenter.notification_settings.where(setting_config_type: "dislike_count").each do |setting|
+      if @comment.dislike == setting.setting_config_params["count"].to_i && @comment.commenter == commenter.name
+        puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the comment  #{@comment.body} has #{@comment.dislike} dislikes"
+        puts AlertService.client.send_alert(EmailAlert.new(:subject => "Testing", :body => "the comment  #{@comment.body} has #{@comment.dislike} likes", :recipient_email=> setting.user.email))
+      end
+    end
   end
 
 end
