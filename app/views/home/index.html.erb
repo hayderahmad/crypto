@@ -35,21 +35,20 @@ div.b {
 </table>
 <br/>
 <div class="container">
-    <div class="row row-cols-1 row-cols-md-3 g-4 ">
-        <%for current_article in @news%>
-            
-            <div class="col-sm">
+    <div class="row row-cols-1 row-cols-md-4 g-4 ">
+        <%@news.each do |current_article| %>
+             <div class="col-sm">
                 <div class="card h-100" >
-                    <img src="<%= current_article["imageurl"] %>" class="card-img-top" alt="<%= current_article["source"]%>">
+                    <img src="<%= current_article.imageurl %>" class="card-img-top" alt="<%= current_article.source%>">
                     <div class="card-body">
-                        <h5 class="card-title"><%= current_article["title"]%></h5>
+                        <h5 class="card-title"><%= current_article.title%></h5>
                         <p class="card-text">
                         <div class="b">
-                        <%= current_article["body"]%>
+                        <%= current_article.body%>
                         </p>
                         </div>
-                        <a href="<%= current_article["url"]%>" class="btn btn-secondary">Read more.....</a>
-                        <a href="/home/show/<%= current_article["id"]%>" class="btn btn-secondary">Discussions</a>
+                        <a href="<%= current_article.article_url%>" class="btn btn-secondary">Read more.....</a>
+                        <a href="/home/show/<%= current_article.id%>" class="btn btn-secondary">Discussions</a>
                         
                     </div>
                 </div>
