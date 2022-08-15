@@ -1,3 +1,16 @@
+<html>
+<head>
+<style> 
+div.b {
+  white-space: nowrap; 
+ 
+  overflow: hidden;
+  text-overflow: ellipsis; 
+  
+}
+</style>
+</head>
+<body>
 <table class="table table-sm table-striped table-bordered table-hover">
     <thead>
         <tr>
@@ -22,14 +35,19 @@
 </table>
 <br/>
 <div class="container">
-    <div class="row">
+    <div class="row row-cols-1 row-cols-md-3 g-4 ">
         <%for current_article in @news%>
+            
             <div class="col-sm">
-                <div class="card" style="width: 18rem;">
+                <div class="card h-100" >
                     <img src="<%= current_article["imageurl"] %>" class="card-img-top" alt="<%= current_article["source"]%>">
                     <div class="card-body">
                         <h5 class="card-title"><%= current_article["title"]%></h5>
-                        <p class="card-text"><%= current_article["body"]%></p>
+                        <p class="card-text">
+                        <div class="b">
+                        <%= current_article["body"]%>
+                        </p>
+                        </div>
                         <a href="<%= current_article["url"]%>" class="btn btn-secondary">Read more.....</a>
                         <a href="/home/show/<%= current_article["id"]%>" class="btn btn-secondary">Discussions</a>
                         
@@ -37,9 +55,11 @@
                 </div>
             <br/> 
             </div>
+            
         <%end%>
     </div>
 </div>
-
+</body>
+</html>
     
 
