@@ -162,6 +162,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.13.6-x86_64-linux)
       racc (~> 1.4)
+    pg (1.4.3)
     popper_js (2.9.3)
     protobuf (3.10.6)
       activesupport (>= 3.2)
@@ -288,6 +289,7 @@ DEPENDENCIES
   jquery-rails
   mail (~> 2.7, >= 2.7.1)
   mailgun-ruby (~> 1.2.5)
+  pg
   protobuf-nats
   puma (~> 5.0)
   rails (~> 7.0.3)
