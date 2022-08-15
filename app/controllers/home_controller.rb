@@ -14,7 +14,7 @@ class HomeController < ApplicationController
         @article = Article.create(title: recived_article['title'], body: recived_article['body'], imageurl: recived_article['imageurl'], source: recived_article['source'], article_url: recived_article['url'], article_id: recived_article['id'])
       end
     end
-    @news = Article.last(10)
+    @news = Article.last(20)
     @prices_url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,BCH,EOS,LTC,ADA,XLM,MIOTA,USDT,TRX&tsyms=USD'
     @prices_uri = URI(@prices_url)
     @prices_response = Net::HTTP.get(@prices_uri)
