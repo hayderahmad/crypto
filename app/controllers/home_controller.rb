@@ -1,6 +1,5 @@
 class HomeController < ApplicationController
-  require "protobuf/nats"
-  require '~/code/proto-definitions/definitions'
+  
   before_action :require_signin
   def index
     require 'net/http'
