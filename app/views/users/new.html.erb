@@ -1,4 +1,8 @@
-<h1>Create New Account</h1>
+<h1 class="text-center">Create New Account</h1>
+<br>
+<br>
+<br>
+<div class="text-center">
 <%= form_with(url: "/users") do |f|%>
     <div class="mb-3">
     <%= f.text_field :name, autofocus: true, placeholder: "Name"%>
@@ -16,3 +20,4 @@
     <%= f.submit "Create Account"%>
     </div>
 <%end%>
+</div>
