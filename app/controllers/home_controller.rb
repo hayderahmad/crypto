@@ -91,6 +91,7 @@ class HomeController < ApplicationController
     end
   end
   def dislike
+    commenter = User.find(session[:user_id])
     @article = Article.find(params[:article_id])
     @comment = @article.comments.find(params[:comment_id])
     new_dislike =  params[:dislike].to_i + 1
