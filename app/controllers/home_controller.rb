@@ -55,15 +55,17 @@ class HomeController < ApplicationController
     end
     if @article.comments.create(commenter: commenter_name, body: params[:comment])
       redirect_to "/home/show/#{params[:id]}", allow_other_host: true
+    else
+      render "/home/show/#{params[:id]}"
     end
     NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
       if @article.comments.count == setting.setting_config_params["count"].to_i
           puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the article #{@article.title} has #{@article.comments.count} comment"
           puts AlertService.client.send_alert(EmailAlert.new(:subject => "Testing", :body => "the article #{@article.title} has #{@article.comments.count} comment", :recipient_email=> setting.user.email))
-        end
       end
-      
     end
+      
+  end
     def show_comment
       @article = Article.find(params[:article_id])
       @comment = @article.comments.find(params[:comment_id])

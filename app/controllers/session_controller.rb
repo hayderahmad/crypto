@@ -3,6 +3,7 @@ class SessionController < ApplicationController
         user = User.find_by(email: params[:email])
         if user && user.authenticate(params[:password])
             session[:user_id] = user.id
+            session[:login_time] = Time.now
             redirect_to "/", notice: "Welcome back, #{user.name}!"
             
         else
