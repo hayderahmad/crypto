@@ -58,24 +58,26 @@ class HomeController < ApplicationController
     else
       render "/home/show/#{params[:id]}"
     end
-    NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
-      if @article.comments.count == setting.setting_config_params["count"].to_i
-          puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the article #{@article.title} has #{@article.comments.count} comment"
-          puts AlertService.client.send_alert(EmailAlert.new(:subject => "Testing", :body => "the article #{@article.title} has #{@article.comments.count} comment", :recipient_email=> setting.user.email))
+    user = User.find(session[:user_id])
+    unless user.notification_settings.count == 0
+      NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
+        if @article.comments.count == setting.setting_config_params["count"].to_i
+            puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the article #{@article.title} has #{@article.comments.count} comment"
+            puts AlertService.client.send_alert(EmailAlert.new(:subject => "Testing", :body => "the article #{@article.title} has #{@article.comments.count} comment", :recipient_email=> setting.user.email))
+        end
       end
     end
-      
   end
-    def show_comment
-      @article = Article.find(params[:article_id])
-      @comment = @article.comments.find(params[:comment_id])
-    end
-    def update_comment
-      @article = Article.find(params[:article_id])
+  def show_comment
+    @article = Article.find(params[:article_id])
     @comment = @article.comments.find(params[:comment_id])
-      if @article.comments.update(body: params[:comment])
-          redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
-      end
+  end
+  def update_comment
+    @article = Article.find(params[:article_id])
+  @comment = @article.comments.find(params[:comment_id])
+    if @article.comments.update(body: params[:comment])
+        redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
+    end
   end
   def like
     commenter = User.find(session[:user_id])
