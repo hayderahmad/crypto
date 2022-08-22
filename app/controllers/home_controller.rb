@@ -75,7 +75,7 @@ class HomeController < ApplicationController
   end
   def update_comment
     @article = Article.find(params[:article_id])
-  @comment = @article.comments.find(params[:comment_id])
+    @comment = @article.comments.find(params[:comment_id])
     if @article.comments.update(body: params[:comment])
         redirect_to "/home/show/#{params[:article_id]}", allow_other_host: true
     end
