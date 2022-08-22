@@ -90,4 +90,12 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  config.action_mailer.smtp_settings = {
+    address: "localhost",
+    port: 25,
+    domain: "localhost.localdomain",
+    openssl_verify_mode: 'none',
+    disable_start_tls: true,
+  }
 end
