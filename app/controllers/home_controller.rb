@@ -56,7 +56,15 @@ class HomeController < ApplicationController
     if @article.comments.create(commenter: commenter_name, body: params[:comment])
       redirect_to "/home/show/#{params[:id]}", allow_other_host: true
       user = User.find(session[:user_id])
-      
+      unless user.notification_settings.count == 0
+        NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
+          set_target = setting.setting_config_params["count"].to_i
+          if @article.comments.count == set_target
+              puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the article #{@article.title} has #{@article.comments.count} comment"
+              UserMailer.with(user: user, article: @article.title, alert_type: "comment_count", target: set_target).emailnotifications.deliver_later
+          end
+        end
+      end
     else
       render "/home/show/#{params[:id]}"
     end

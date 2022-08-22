@@ -82,4 +82,5 @@ group :test do
   gem "webdrivers"
  
   gem 'embedded_record', '~> 0.0.5'
+  gem 'net-protocol', '~> 0.1.3'
 end

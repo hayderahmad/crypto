@@ -1,5 +1,5 @@
 require "active_support/core_ext/integer/time"
-Rails.application.config.hosts << "673a-205-204-35-42.ngrok.io"
+Rails.application.config.hosts << "481d-205-204-35-42.ngrok.io"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -68,4 +68,12 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
+
+  config.action_mailer.smtp_settings = {
+    address: "localhost",
+    port: 25,
+    domain: "localhost.localdomain",
+    openssl_verify_mode: 'none',
+    disable_start_tls: true,
+  }
 end
