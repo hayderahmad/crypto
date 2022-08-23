@@ -60,8 +60,25 @@ class HomeController < ApplicationController
         NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
           set_target = setting.setting_config_params["count"].to_i
           if @article.comments.count == set_target
-              puts "Send email to :  #{setting.user.name} the email : #{setting.user.email} the article #{@article.title} has #{@article.comments.count} comment"
-              UserMailer.with(user: user, article: @article.title, alert_type: "comment_count", target: set_target).emailnotifications.deliver_later
+              
+              require 'mailgun-ruby'
+              # First, instantiate the Mailgun Client with your API key
+              mg_client = Mailgun::Client.new Rails.application.credentials.config[:mailgun][:api_key]
+
+              # Define your message parameters
+              message_params =  { from: "support@#{Rails.application.credentials.config[:mailgun][:mydomain]}",
+                                  to:   user.email,
+                                  subject: 'Crypto News Notification',
+                                  text:    " The number of comments for the article:
+
+                                   #{@article.title}
+                                   
+                                   has reached #{set_target}"
+                                }
+
+              # Send your message through the client
+              mg_client.send_message Rails.application.credentials.config[:mailgun][:mydomain], message_params
+              
           end
         end
       end
