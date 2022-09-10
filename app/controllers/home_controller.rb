@@ -2,36 +2,14 @@ class HomeController < ApplicationController
   
   before_action :require_signin
   def index
-    require 'net/http'
-    require 'json'
-    
-    @url = 'https://min-api.cryptocompare.com/data/v2/news/?lang=EN'
-    @uri = URI(@url)
-    @response = Net::HTTP.get(@uri)
-    @news = JSON.parse(@response)
-    @news['Data'].each do |recived_article|
-      unless Article.exists?(article_id: recived_article['id'])  
-        @article = Article.create(title: recived_article['title'], body: recived_article['body'], imageurl: recived_article['imageurl'], source: recived_article['source'], article_url: recived_article['url'], article_id: recived_article['id'])
-      end
-    end
+    Article.update_news
     @news = Article.last(20)
-    @prices_url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms=BTC,ETH,XRP,BCH,EOS,LTC,ADA,XLM,MIOTA,USDT,TRX&tsyms=USD'
-    @prices_uri = URI(@prices_url)
-    @prices_response = Net::HTTP.get(@prices_uri)
-    @prices = JSON.parse(@prices_response)
+    @prices = Article.get_prices
   end
 
   def prices
-    require 'net/http'
-    require 'json'
     @symbol = params[:sym]
-    if @symbol
-      @symbol = @symbol.upcase
-      @qoute_url = 'https://min-api.cryptocompare.com/data/pricemultifull?fsyms='+ @symbol +'&tsyms=USD'
-      @qoute_uri = URI(@qoute_url)
-      @qoute_response = Net::HTTP.get(@qoute_uri)
-      @qoute = JSON.parse(@qoute_response)
-    end
+    @qoute = Article.get_qoute(@symbol)
   end
 
   def show
@@ -46,45 +24,17 @@ class HomeController < ApplicationController
   end
   
   def create_comment
+    article_id = params[:id]
+    session_id = session[:user_id]
+    article = Article.find(article_id)
+    commenter_name = User.find(session_id).name
+    if article.comments.create(commenter: commenter_name, body: params[:comment])
+      Article.send_email(article_id, session_id)
+      redirect_to "/home/show/#{article_id}", allow_other_host: true
+    else
+      render "/home/show/#{article_id}"
+    end
     
-    @article = Article.find(params[:id])
-    if session[:user_id]
-      commenter_name = User.find(session[:user_id]).name
-    else
-      commenter_name = "Guest"
-    end
-    if @article.comments.create(commenter: commenter_name, body: params[:comment])
-      redirect_to "/home/show/#{params[:id]}", allow_other_host: true
-      user = User.find(session[:user_id])
-      unless user.notification_settings.count == 0
-        NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
-          set_target = setting.setting_config_params["count"].to_i
-          if @article.comments.count == set_target
-              
-              require 'mailgun-ruby'
-              # First, instantiate the Mailgun Client with your API key
-              mg_client = Mailgun::Client.new Rails.application.credentials.config[:mailgun][:api_key]
-
-              # Define your message parameters
-              message_params =  { from: "support@#{Rails.application.credentials.config[:mailgun][:mydomain]}",
-                                  to:   user.email,
-                                  subject: 'Crypto News Notification',
-                                  text:    " The number of comments for the article:
-
-                                   #{@article.title}
-                                   
-                                   has reached #{set_target}"
-                                }
-
-              # Send your message through the client
-              mg_client.send_message Rails.application.credentials.config[:mailgun][:mydomain], message_params
-              
-          end
-        end
-      end
-    else
-      render "/home/show/#{params[:id]}"
-    end
   end
   def show_comment
     @article = Article.find(params[:article_id])

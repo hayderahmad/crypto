@@ -1,6 +1,6 @@
 require "active_support/core_ext/integer/time"
 # I use this is only to test the app on vegrant 
-# Rails.application.config.hosts << "7250-172-58-17-139.ngrok.io"
+Rails.application.config.hosts << "0d9e-172-58-21-235.ngrok.io"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
