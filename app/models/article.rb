@@ -41,36 +41,46 @@ class Article < ApplicationRecord
             JSON.parse(qoute_response)
         end
     end
-    def self.send_email(article_id, session_id)
-        article = Article.find(article_id)
-        commenter_name = User.find(session_id).name
-        user = User.find(session_id)
-        unless user.notification_settings.count == 0
-            NotificationSetting.where(setting_config_type: "comment_count").each do |setting|
-                set_target = setting.setting_config_params["count"].to_i
-                if article.comments.count == set_target
-                    
-                    require 'mailgun-ruby'
-                    # First, instantiate the Mailgun Client with your API key
-                    mg_client = Mailgun::Client.new Rails.application.credentials.config[:mailgun][:api_key]
-
-                    # Define your message parameters
-                    message_params =  { from: "support@#{Rails.application.credentials.config[:mailgun][:mydomain]}",
-                                        to:   user.email,
-                                        subject: 'Crypto News Notification',
-                                        text:    " The number of comments for the article:
-
-                                        #{article.title}
-                                        
-                                        has reached #{set_target}"
-                                        }
-
-                    # Send your message through the client
-                    mg_client.send_message Rails.application.credentials.config[:mailgun][:mydomain], message_params
-                    
-                end
+    def self.notification_email(article, config_type, comment= nil)
+        NotificationSetting.where(setting_config_type: config_type).each do |setting|
+            user = setting.user                    
+            set_target = setting.setting_config_params["count"].to_i
+            case config_type
+                when "comment_count"
+                    if article.comments.count == set_target
+                        mail_gun(article, set_target, user, config_type)
+                        
+                    end
+                when "like_count"
+                    if comment.like == set_target
+                        mail_gun(article, set_target, user, config_type)
+                    end
+                when "dislike_count"
+                    if comment.dislike == set_target
+                        mail_gun(article, set_target, user, config_type)
+                    end
             end
+            
         end
                 
+    end
+    def self.mail_gun(article, set_target, user, config_type)
+        require 'mailgun-ruby'
+        # First, instantiate the Mailgun Client with your API key
+        mg_client = Mailgun::Client.new Rails.application.credentials.config[:mailgun][:api_key]
+
+        # Define your message parameters
+        message_params =  { from: "support@#{Rails.application.credentials.config[:mailgun][:mydomain]}",
+                            to:   user.email,
+                            subject: 'Crypto News Notification',
+                            text:    " The number of #{config_type} for the article:
+
+                            #{article.title}
+                            
+                            has reached #{set_target}"
+                            }
+
+        # Send your message through the client
+        mg_client.send_message Rails.application.credentials.config[:mailgun][:mydomain], message_params
     end
 end
