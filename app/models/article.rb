@@ -67,10 +67,12 @@ class Article < ApplicationRecord
     def self.mail_gun(article, set_target, user, config_type)
         require 'mailgun-ruby'
         # First, instantiate the Mailgun Client with your API key
-        mg_client = Mailgun::Client.new Rails.application.credentials.config[:mailgun][:api_key]
+        # mg_client = Mailgun::Client.new Rails.application.credentials.config[:mailgun][:api_key]
+        mg_client = Mailgun::Client.new ENV["mailgun_api_key"]
 
         # Define your message parameters
-        message_params =  { from: "support@#{Rails.application.credentials.config[:mailgun][:mydomain]}",
+        message_params =  { from: "support@#{ENV["mailgun_domain"]}",
+                            #  from: "support@#{Rails.application.credentials.config[:mailgun][:mydomain]}",
                             to:   user.email,
                             subject: 'Crypto News Notification',
                             text:    " The number of #{config_type} for the article:
@@ -81,6 +83,6 @@ class Article < ApplicationRecord
                             }
 
         # Send your message through the client
-        mg_client.send_message Rails.application.credentials.config[:mailgun][:mydomain], message_params
+        mg_client.send_message ENV["mailgun_domain"], message_params
     end
 end
