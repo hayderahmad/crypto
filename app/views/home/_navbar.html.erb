@@ -7,7 +7,7 @@
     <div class="collapse navbar-collapse" id="navbarSupportedContent">
       <ul class="navbar-nav me-auto mb-2 mb-lg-0">
           <%= link_to "Get Prices", home_prices_path, class: "nav-link"%> 
-          <%if session[:user_id]%>
+          <%if session[:user_id] and User.exists?(session[:user_id])%>
               <%if User.find(session[:user_id]).admin%>
                   <%= link_to "Users", "/users", class: "nav-link"%>
               <%end%>
