@@ -1,6 +1,6 @@
 class HomeController < ApplicationController
   
-  before_action :require_signin
+  before_action :require_signin, except: :index
   def index
     Article.update_news
     @news = Article.last(20)
