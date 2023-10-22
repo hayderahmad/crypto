@@ -1,13 +1,11 @@
 require "active_support/core_ext/integer/time"
-# I use this is only to test the app on vegrant 
-Rails.application.config.hosts << "0d9e-172-58-21-235.ngrok.io"
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
 
   # In the development environment your application's code is reloaded any time
   # it changes. This slows down response time but is perfect for development
-  # you don't have to restart the web server when you make code changes.
+  # since you don't have to restart the web server when you make code changes.
   config.cache_classes = false
 
   # Do not eager load code on boot.
@@ -39,7 +37,7 @@ Rails.application.configure do
   config.active_storage.service = :local
 
   # Don't care if the mailer can't send.
-  config.action_mailer.raise_delivery_errors = true
+  config.action_mailer.raise_delivery_errors = false
 
   config.action_mailer.perform_caching = false
 
@@ -69,19 +67,4 @@ Rails.application.configure do
 
   # Uncomment if you wish to allow Action Cable access from any origin.
   # config.action_cable.disable_request_forgery_protection = true
-
-  # config.action_mailer.smtp_settings = {
-  #   address: "localhost",
-  #   port: 25,
-  #   domain: "localhost.localdomain",
-  #   openssl_verify_mode: 'none',
-  #   disable_start_tls: true,
-  # }
-
-  # config.action_mailer.delivery_method = :mailgun
-  # config.action_mailer.mailgun_settings = {
-  #   api_key: Rails.application.credentials.config[:mailgun][:api_key],
-  #   domain: Rails.application.credentials.config[:mailgun][:mydomain],
-  #   # api_host: 'api.eu.mailgun.net'  # Uncomment this line for EU region domains
-  # }
 end
