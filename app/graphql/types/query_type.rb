@@ -27,5 +27,32 @@ module Types
     def test_field
       "Hello World!"
     end
+      # Get all users
+    field :users, [Types::UserType], null: false
+    def users
+      User.all
+    end
+
+    # Get a specific user
+    field :user, Types::UserType, null: false do
+      argument :id, ID, required: true
+    end
+    def user(id:)
+      User.find(id)
+    end
+      # Get all articles
+    field :articles, [Types::ArticleType], null: false
+    def articles
+      Article.all
+    end
+
+    # Get a specific article
+    field :article, Types::ArticleType, null: false do
+      argument :id, ID, required: true
+    end
+    def article(id:)
+      Article.find(id)
+    end
   end
+
 end

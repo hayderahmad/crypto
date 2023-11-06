@@ -11,5 +11,12 @@ module Types
     field :article_id, String
     field :created_at, GraphQL::Types::ISO8601DateTime, null: false
     field :updated_at, GraphQL::Types::ISO8601DateTime, null: false
+    field :comments, [Types::CommentType], null: true
+    field :comments_count, Integer, null: true
+    
+    def comments_count
+      object.comments.size
+    end
   end
+
 end
